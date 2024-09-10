@@ -34,5 +34,5 @@
 *x64/
 
 #SFML
-/Pong/sfml/include
-/Pong/sfml/lib
+/SFML-PONG/sfml/include
+/SFML-PONG/sfml/lib
