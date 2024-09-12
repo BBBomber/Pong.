@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Include/GameState.h"
 #include <SFML/Graphics.hpp>
 
 class GameplayLoop
@@ -10,6 +11,9 @@ public:
 
     void run();                  // Function to start the game loop
 
+    // Set the current game state
+    void setState(GameState* state);
+
 private:
 
     sf::RenderWindow window;     // The SFML window where the game will run
@@ -17,9 +21,12 @@ private:
     sf::Clock clock;             // A clock to handle frame timing
     float aspectRatio;           // Aspect ratio for the game
 
+    GameState* currentState;           // Pointer to the current game state
+
     void processEvents();        // Handles input and events
     void update();               // Updates the game state
     void render();               // Draws the game to the screen
     void maintainAspectRatio();  // Function to maintain the aspect ratio
+    void initialize();                 // Initialize the current state
 
 };

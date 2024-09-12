@@ -4,7 +4,8 @@
 GameplayLoop::GameplayLoop()
     : window(sf::VideoMode(800, 600), "Pong"),
     view(sf::FloatRect(0, 0, 800, 600)), // Initialize view with the window size
-    aspectRatio(4.f / 3.f)               // 4:3 aspect ratio
+    aspectRatio(4.f / 3.f),               // 4:3 aspect ratio
+    currentState(nullptr)  // No state initially set
 {
     window.setView(view);              // Set the view
 }
@@ -12,11 +13,17 @@ GameplayLoop::GameplayLoop()
 // Destructor: Cleanup
 GameplayLoop::~GameplayLoop()
 {
+    delete currentState;  // Clean up the current state
 }
 
 // The main game loop
 void GameplayLoop::run()
 {
+
+    // Initialize the current state before the game loop
+    if (currentState)
+        currentState->initialize();
+
     while (window.isOpen())
     {
         processEvents();
@@ -25,9 +32,26 @@ void GameplayLoop::run()
     }
 }
 
+// Set the current game state
+void GameplayLoop::setState(GameState* state)
+{
+    if (currentState)
+    {
+        delete currentState;  // Clean up the previous state
+    }
+    currentState = state;
+    currentState->initialize();  // Initialize the new state
+}
+
 // Handles input and events
 void GameplayLoop::processEvents()
 {
+
+    if (currentState)
+    {
+        currentState->handleInput(window);  // Delegate input to the current state
+    }
+
     sf::Event event;
     while (window.pollEvent(event))
     {
@@ -44,7 +68,11 @@ void GameplayLoop::processEvents()
 // Update loop
 void GameplayLoop::update()
 {
-    // Game logic goes here (for now, it's empty)
+    if (currentState)
+    {
+        float deltaTime = clock.restart().asSeconds();
+        currentState->update(deltaTime);  // Delegate update to the current state
+    }
 }
 
 // Renders everything to the screen
@@ -52,7 +80,10 @@ void GameplayLoop::render()
 {
     window.clear(sf::Color::Black);
 
-    // Drawing code goes here
+    if (currentState)
+    {
+        currentState->render(window);  // Delegate rendering to the current state
+    }
 
     window.display();
 }
