@@ -21,9 +21,9 @@ void maintainAspectRatio(sf::RenderWindow& window, sf::View& view, float aspectR
     // Calculate the new aspect ratio
     float windowAspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
 
-    // Determine if we need to add letterboxing (black bars) on the sides or top/bottom
+ 
     if (windowAspectRatio > aspectRatio) {
-        // Window is wider than the desired aspect ratio, add black bars on the sides
+        // Window is wider than the desired aspect ratio
         float newWidth = aspectRatio / windowAspectRatio;
         view.setViewport(sf::FloatRect((1.f - newWidth) / 2.f, 0.f, newWidth, 1.f));
     }
