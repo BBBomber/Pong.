@@ -2,8 +2,25 @@
 
 int main()
 {
-    // Create a window with dimensions 800x600 and title "Pong"
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Pong");
+    // Create a window with dimensions 800x600 and title "Pong" (Default style: Titlebar, Resize, Close)
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Pong", sf::Style::Default);
+
+    // Uncomment one of the following lines to create windows with different styles:
+
+    // Create a window with no decorations (no title bar, no borders, no close button)
+    // sf::RenderWindow window(sf::VideoMode(800, 600), "Pong", sf::Style::None);
+
+    // Create a window with only a title bar and close button (no resizing)
+    // sf::RenderWindow window(sf::VideoMode(800, 600), "Pong", sf::Style::Titlebar | sf::Style::Close);
+
+    // Create a window that can be resized, with a title bar and close button
+    // sf::RenderWindow window(sf::VideoMode(800, 600), "Pong", sf::Style::Resize | sf::Style::Close);
+
+    // Create a fullscreen window (no decorations, fills the screen)
+    // sf::RenderWindow window(sf::VideoMode(1920, 1080), "Pong", sf::Style::Fullscreen);
+
+    // Create a borderless window that fills the screen (no title bar, but not true fullscreen)
+    //sf::RenderWindow window(sf::VideoMode(1920, 1080), "Pong", sf::Style::None);
 
     // Main game loop: runs as long as the window is open
     while (window.isOpen())
