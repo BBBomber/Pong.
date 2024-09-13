@@ -26,8 +26,11 @@ void GameplayLoop::run()
 
     while (window.isOpen())
     {
-        processEvents();
-        update();
+        // Calculate deltaTime once per frame
+        float deltaTime = clock.restart().asSeconds();
+
+        processEvents(deltaTime);
+        update(deltaTime);
         render();
     }
 }
@@ -44,12 +47,12 @@ void GameplayLoop::setState(GameState* state)
 }
 
 // Handles input and events
-void GameplayLoop::processEvents()
+void GameplayLoop::processEvents(float deltaTime)
 {
 
     if (currentState)
     {
-        currentState->handleInput(window);  // Delegate input to the current state
+        currentState->handleInput(window, deltaTime);  // Delegate input to the current state
     }
 
     sf::Event event;
@@ -66,11 +69,10 @@ void GameplayLoop::processEvents()
 }
 
 // Update loop
-void GameplayLoop::update()
+void GameplayLoop::update(float deltaTime)
 {
     if (currentState)
     {
-        float deltaTime = clock.restart().asSeconds();
         currentState->update(deltaTime);  // Delegate update to the current state
     }
 }

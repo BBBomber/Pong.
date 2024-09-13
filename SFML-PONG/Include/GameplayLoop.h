@@ -23,10 +23,9 @@ private:
 
     GameState* currentState;           // Pointer to the current game state
 
-    void processEvents();        // Handles input and events
-    void update();               // Updates the game state
+    void processEvents(float deltaTime);        // Handles input and events
+    void update(float deltaTime);               // Updates the game state
     void render();               // Draws the game to the screen
     void maintainAspectRatio();  // Function to maintain the aspect ratio
-    void initialize();                 // Initialize the current state
 
 };

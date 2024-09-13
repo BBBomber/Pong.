@@ -15,7 +15,7 @@ void GameplayState::initialize()
     // Initialization logic for gameplay (empty for now)
 }
 
-void GameplayState::handleInput(sf::RenderWindow& window)
+void GameplayState::handleInput(sf::RenderWindow& window, float deltaTime)
 {
     // Input handling logic (empty for now)
 }
