@@ -19,14 +19,17 @@ void GameplayLoop::run()
 {
     while (window.isOpen())
     {
-        processEvents();
-        update();
+        // Calculate deltaTime once per frame
+        float deltaTime = clock.restart().asSeconds();
+
+        processEvents(deltaTime);
+        update(deltaTime);
         render();
     }
 }
 
 // Handles input and events
-void GameplayLoop::processEvents()
+void GameplayLoop::processEvents(float deltaTime)
 {
     sf::Event event;
     while (window.pollEvent(event))
@@ -42,7 +45,7 @@ void GameplayLoop::processEvents()
 }
 
 // Update loop
-void GameplayLoop::update()
+void GameplayLoop::update(float deltaTime)
 {
     // Game logic goes here (for now, it's empty)
 }

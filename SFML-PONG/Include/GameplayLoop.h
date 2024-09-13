@@ -17,8 +17,8 @@ private:
     sf::Clock clock;             // A clock to handle frame timing
     float aspectRatio;           // Aspect ratio for the game
 
-    void processEvents();        // Handles input and events
-    void update();               // Updates the game state
+    void processEvents(float deltaTime);        // Handles input and events
+    void update(float deltaTime);               // Updates the game state
     void render();               // Draws the game to the screen
     void maintainAspectRatio();  // Function to maintain the aspect ratio
 
