@@ -11,7 +11,7 @@ public:
     virtual void initialize() = 0;
 
     // Handles input for this state
-    virtual void handleInput(sf::RenderWindow& window) = 0;
+    virtual void handleInput(sf::RenderWindow& window, float deltaTime) = 0;
 
     // Updates the state logic
     virtual void update(float deltaTime) = 0;
