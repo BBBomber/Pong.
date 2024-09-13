@@ -133,10 +133,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Source\GameplayElements\Paddle.cpp" />
     <ClCompile Include="Source\GameplayLoop.cpp" />
     <ClCompile Include="Source\GameStates\GameplayState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\GameplayElements\Paddle.h" />
     <ClInclude Include="Include\GameplayLoop.h" />
     <ClInclude Include="Include\GameStates\GameplayState.h" />
     <ClInclude Include="Include\GameState.h" />

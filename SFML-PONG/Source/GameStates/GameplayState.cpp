@@ -1,9 +1,11 @@
 #include "../../Include/GameStates/GameplayState.h"
 
 GameplayState::GameplayState()
+    : leftPaddle(sf::Vector2f(0, 250), sf::Keyboard::W, sf::Keyboard::S),   // Initialize left paddle (W and S)
+    rightPaddle(sf::Vector2f(790, 250), sf::Keyboard::Up, sf::Keyboard::Down)  // Initialize right paddle (Up and Down)
 {
-    // Constructor logic if necessary
 }
+
 
 GameplayState::~GameplayState()
 {
@@ -17,15 +19,21 @@ void GameplayState::initialize()
 
 void GameplayState::handleInput(sf::RenderWindow& window, float deltaTime)
 {
-    // Input handling logic (empty for now)
+    // Delegate input handling to the paddles
+    leftPaddle.handleInput(window, deltaTime);
+    rightPaddle.handleInput(window, deltaTime);
 }
 
-void GameplayState::update(float deltaTime)
+void GameplayState::update(sf::RenderWindow& window, float deltaTime)
 {
-    // Update gameplay logic (empty for now)
+    // Update both paddles with boundary checks
+    leftPaddle.update(deltaTime, window);
+    rightPaddle.update(deltaTime, window);
 }
 
 void GameplayState::render(sf::RenderWindow& window)
 {
-    // Rendering logic (empty for now)
+    // Render both paddles
+    leftPaddle.render(window);
+    rightPaddle.render(window);
 }

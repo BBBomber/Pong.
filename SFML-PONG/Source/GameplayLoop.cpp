@@ -73,7 +73,7 @@ void GameplayLoop::update(float deltaTime)
 {
     if (currentState)
     {
-        currentState->update(deltaTime);  // Delegate update to the current state
+        currentState->update(window, deltaTime);  // Delegate update to the current state
     }
 }
 
