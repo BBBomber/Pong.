@@ -10,7 +10,7 @@ public:
 
     void initialize() override;    // Initialize the gameplay
     void handleInput(sf::RenderWindow& window, float deltaTime) override;  // Handle input for gameplay
-    void update(float deltaTime) override;  // Update the gameplay state
+    void update(sf::RenderWindow& window, float deltaTime) override;  // Update the gameplay state
     void render(sf::RenderWindow& window) override;  // Render the gameplay
 
 private:

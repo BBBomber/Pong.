@@ -20,7 +20,7 @@ void GameplayState::handleInput(sf::RenderWindow& window, float deltaTime)
     // Input handling logic (empty for now)
 }
 
-void GameplayState::update(float deltaTime)
+void GameplayState::update(sf::RenderWindow& window, float deltaTime)
 {
     // Update gameplay logic (empty for now)
 }

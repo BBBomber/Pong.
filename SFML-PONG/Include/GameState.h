@@ -14,7 +14,7 @@ public:
     virtual void handleInput(sf::RenderWindow& window, float deltaTime) = 0;
 
     // Updates the state logic
-    virtual void update(float deltaTime) = 0;
+    virtual void update(sf::RenderWindow& window, float deltaTime) = 0;
 
     // Renders the state to the screen
     virtual void render(sf::RenderWindow& window) = 0;
