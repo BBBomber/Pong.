@@ -2,6 +2,7 @@
 
 #include "../GameState.h"
 #include "../GameplayElements/Paddle.h"
+#include "../GameplayElements/Ball.h"
 
 class GameplayState : public GameState
 {
@@ -17,4 +18,5 @@ public:
 private:
     Paddle leftPaddle;            // Left paddle (W and S)
     Paddle rightPaddle;           // Right paddle (Up and Down arrow keys)
+    Ball ball;                    // ball lol
 };
