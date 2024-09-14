@@ -87,3 +87,19 @@ void Ball::checkWindowCollision(const sf::RenderWindow& window)
         ballShape.setPosition(ballShape.getPosition().x, viewBottom - radius);
     }
 }
+
+// Reset the ball to the center after a goal
+void Ball::reset()
+{
+    // Set the ball back to the center of the screen
+    ballShape.setPosition(400, 300);  
+
+    // Reverse the velocity to simulate ball moving in the opposite direction
+    velocity.x = -velocity.x;
+}
+
+sf::FloatRect Ball::getBounds() const
+{
+    return ballShape.getGlobalBounds();
+}
+

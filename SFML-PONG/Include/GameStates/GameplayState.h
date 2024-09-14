@@ -19,4 +19,16 @@ private:
     Paddle leftPaddle;            // Left paddle (W and S)
     Paddle rightPaddle;           // Right paddle (Up and Down arrow keys)
     Ball ball;                    // ball lol
+
+    int leftScore;
+    int rightScore;
+
+    sf::Font font;                // Font used for rendering the score
+    sf::Text leftScoreText;       // Text object to display the left player's score
+    sf::Text rightScoreText;      // Text object to display the right player's score
+
+    void checkGoal();
+    void reset();
+    void updateScoreText();       
+
 };

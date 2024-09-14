@@ -13,6 +13,8 @@ public:
     void render(sf::RenderWindow& window);           // Render the ball on the window
 
     void handleCollision(const Paddle& paddle);      // Handle collision with paddles
+    void reset();                                    // Reset position
+    sf::FloatRect getBounds() const;                 // Get the ball's bounds
 
 private:
     sf::CircleShape ballShape;                       // Shape representing the ball

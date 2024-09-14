@@ -133,17 +133,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Source\AssetPaths.cpp" />
     <ClCompile Include="Source\GameplayElements\Ball.cpp" />
     <ClCompile Include="Source\GameplayElements\Paddle.cpp" />
     <ClCompile Include="Source\GameplayLoop.cpp" />
     <ClCompile Include="Source\GameStates\GameplayState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\AssetPaths.h" />
     <ClInclude Include="Include\GameplayElements\Ball.h" />
     <ClInclude Include="Include\GameplayElements\Paddle.h" />
     <ClInclude Include="Include\GameplayLoop.h" />
     <ClInclude Include="Include\GameStates\GameplayState.h" />
     <ClInclude Include="Include\GameState.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\fonts\OpenSans.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
