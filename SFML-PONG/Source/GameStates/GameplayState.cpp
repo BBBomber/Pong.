@@ -63,6 +63,8 @@ void GameplayState::update(sf::RenderWindow& window, float deltaTime)
 
 void GameplayState::render(sf::RenderWindow& window)
 {
+    drawDashedLine(window);
+
     // Render both paddles
     leftPaddle.render(window);
     rightPaddle.render(window);
@@ -110,4 +112,30 @@ void GameplayState::updateScoreText()
 {
     leftScoreText.setString(std::to_string(leftScore));
     rightScoreText.setString(std::to_string(rightScore));
+}
+
+void GameplayState::drawDashedLine(sf::RenderWindow& window)
+{
+    const float dashHeight = 15.0f;  // Height of each dash
+    const float dashWidth = 5.0f;    // Width of each dash
+    const float gap = 10.0f;         // Gap between each dash
+
+    // Get the current view to account for resizing or fullscreen
+    sf::View currentView = window.getView();
+    sf::Vector2f viewSize = currentView.getSize();
+    sf::Vector2f viewCenter = currentView.getCenter();
+
+    // Calculate the number of dashes to draw based on the view size
+    const float numDashes = viewSize.y / (dashHeight + gap);
+
+    // Draw dashes relative to the view's center, maintaining aspect ratio
+    for (int i = 0; i < numDashes; ++i)
+    {
+        sf::RectangleShape dash(sf::Vector2f(dashWidth, dashHeight));
+        dash.setPosition(viewCenter.x - dashWidth / 2.0f, (i * (dashHeight + gap)) - viewSize.y / 2.0f + viewCenter.y);
+        dash.setFillColor(sf::Color::White);  // White dashes
+
+        // Draw the dash
+        window.draw(dash);
+    }
 }

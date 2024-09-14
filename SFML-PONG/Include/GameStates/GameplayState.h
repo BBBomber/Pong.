@@ -31,4 +31,6 @@ private:
     void reset();
     void updateScoreText();       
 
+    void drawDashedLine(sf::RenderWindow& window);  // Draw a dashed line in the center
+
 };
