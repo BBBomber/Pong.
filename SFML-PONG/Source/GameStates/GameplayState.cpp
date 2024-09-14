@@ -1,4 +1,5 @@
 #include "../../Include/GameStates/GameplayState.h"
+#include "../../Include/AudioManager.h"
 #include "../../Include/AssetPaths.h"
 
 GameplayState::GameplayState()
@@ -83,6 +84,7 @@ void GameplayState::checkGoal()
     if (ballPos.x < 0)
     {
         rightScore++;  // Right player scores
+        AudioManager::getInstance().playSoundEffect(SoundEffects::Score);
         updateScoreText();
         reset();       // Reset the ball 
     }
@@ -90,6 +92,7 @@ void GameplayState::checkGoal()
     else if (ballPos.x > 800)  // Assuming the window width is 800
     {
         leftScore++;   // Left player scores
+        AudioManager::getInstance().playSoundEffect(SoundEffects::Score);
         updateScoreText();
         reset();       // Reset the ball 
     }
@@ -99,7 +102,7 @@ void GameplayState::checkGoal()
 void GameplayState::reset()
 {
     ball.reset();  // Reset the ball to the center
-    // Optionally, you can also reset the paddle positions here
+
 }
 
 // Update the score text objects with the latest scores

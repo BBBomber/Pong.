@@ -10,6 +10,7 @@ public:
     ~GameplayLoop();             // Destructor to clean up resources
 
     void run();                  // Function to start the game loop
+    void initialize();           // init resources (ex - audio)
 
     // Set the current game state
     void setState(GameState* state);

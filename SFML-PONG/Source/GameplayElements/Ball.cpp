@@ -1,4 +1,5 @@
 #include "../../Include/GameplayElements/Ball.h"
+#include "../../Include/AudioManager.h"
 
 
 
@@ -47,6 +48,8 @@ void Ball::handleCollision(const Paddle& paddle)
         // Reverse the horizontal velocity (bounce back)
         velocity.x = -velocity.x;
 
+        AudioManager::getInstance().playSoundEffect(SoundEffects::Bounce);
+
         // Move the ball out of the paddle to prevent it from sticking
         if (velocity.x > 0)  // Moving right
         {
@@ -78,12 +81,14 @@ void Ball::checkWindowCollision(const sf::RenderWindow& window)
     {
         // Hit the top: reverse vertical velocity and reposition
         velocity.y = -velocity.y;
+        AudioManager::getInstance().playSoundEffect(SoundEffects::Bounce);
         ballShape.setPosition(ballShape.getPosition().x, viewTop + radius);
     }
     else if (ballBounds.top + ballBounds.height > viewBottom)
     {
         // Hit the bottom: reverse vertical velocity and reposition
         velocity.y = -velocity.y;
+        AudioManager::getInstance().playSoundEffect(SoundEffects::Bounce);
         ballShape.setPosition(ballShape.getPosition().x, viewBottom - radius);
     }
 }

@@ -1,4 +1,5 @@
 #include "../Include/GameplayLoop.h"
+#include "../Include/AudioManager.h"
 
 // Constructor: Initializes the window and sets up the game
 GameplayLoop::GameplayLoop()
@@ -16,6 +17,13 @@ GameplayLoop::~GameplayLoop()
     delete currentState;  // Clean up the current state
 }
 
+
+void GameplayLoop::initialize()
+{
+    // Initialize the AudioManager at the start of the game
+    AudioManager::getInstance().initialize();
+}
+
 // The main game loop
 void GameplayLoop::run()
 {
@@ -23,6 +31,8 @@ void GameplayLoop::run()
     // Initialize the current state before the game loop
     if (currentState)
         currentState->initialize();
+
+    AudioManager::getInstance().playBackgroundMusic();
 
     while (window.isOpen())
     {

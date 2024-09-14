@@ -8,6 +8,10 @@ public:
     // Image paths
 
     // Sound paths
+    static const std::string bgMusic;
+    static const std::string clickEffect;
+    static const std::string bounceEffect;
+    static const std::string scoreEffect;
 
     // Font paths
     static const std::string mainFont;
