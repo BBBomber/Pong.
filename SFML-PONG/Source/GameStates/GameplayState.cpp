@@ -2,10 +2,11 @@
 #include "../../Include/AudioManager.h"
 #include "../../Include/AssetPaths.h"
 
-GameplayState::GameplayState()
-    : leftPaddle(sf::Vector2f(0, 250), sf::Keyboard::W, sf::Keyboard::S),   // Initialize left paddle (W and S)
+GameplayState::GameplayState(GameplayLoop* loop)
+    : gameLoop(loop),  // Store the reference to GameplayLoop
+    leftPaddle(sf::Vector2f(0, 250), sf::Keyboard::W, sf::Keyboard::S),   // Initialize left paddle (W and S)
     rightPaddle(sf::Vector2f(790, 250), sf::Keyboard::Up, sf::Keyboard::Down),  // Initialize right paddle (Up and Down)
-    ball(10.f, 400.f), leftScore(0), rightScore(0)  //init ball and score
+    ball(10.f, 400.f), leftScore(0), rightScore(0)  // Initialize ball and score
 {
 }
 
@@ -39,11 +40,15 @@ void GameplayState::initialize()
     updateScoreText();  // Set initial score text
 }
 
-void GameplayState::handleInput(sf::RenderWindow& window, float deltaTime)
+void GameplayState::handleInput( sf::RenderWindow& window, float deltaTime)
 {
     // Delegate input handling to the paddles
     leftPaddle.handleInput(window, deltaTime);
     rightPaddle.handleInput(window, deltaTime);
+}
+
+void GameplayState::handleEventInput(const sf::Event& event, sf::RenderWindow& window)
+{
 }
 
 void GameplayState::update(sf::RenderWindow& window, float deltaTime)

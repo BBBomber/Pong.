@@ -1,5 +1,6 @@
 #include "../../Include/GameplayElements/Paddle.h"
 
+
 // Constructor to initialize position and control keys
 Paddle::Paddle(sf::Vector2f position, sf::Keyboard::Key upKey, sf::Keyboard::Key downKey)
     : upKey(upKey), downKey(downKey)

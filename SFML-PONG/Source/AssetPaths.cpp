@@ -3,6 +3,7 @@
 // Initialize the static members with the actual file paths
 
 // Image paths
+const std::string AssetPaths::bgImage = "assets/textures/Pong_BG.jpg";
 
 // Sound paths
 const std::string AssetPaths::bgMusic = "assets/sounds/bg_music.mp3";

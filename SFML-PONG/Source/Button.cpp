@@ -43,7 +43,7 @@ void Button::loadFont()
 }
 
 // Set the callback function for the button click event
-void Button::setOnClick(void (*callback)())
+void Button::setOnClick(std::function<void()> callback)
 {
     onClick = callback;
 }
@@ -58,9 +58,13 @@ void Button::handleEvent(const sf::Event& event, const sf::RenderWindow& window)
 {
     if (event.type == sf::Event::MouseButtonPressed)
     {
+        // Get the mouse position in pixel coordinates
         sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
-        sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
 
+        // Convert the pixel coordinates to world coordinates, accounting for the current view
+        sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, window.getView());
+
+        // Check if the mouse click is within the button's bounds in world coordinates
         if (buttonShape.getGlobalBounds().contains(worldPos) && onClick != nullptr)
         {
             onClick();  // Trigger the button's action

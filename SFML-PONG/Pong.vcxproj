@@ -135,19 +135,23 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Source\AssetPaths.cpp" />
     <ClCompile Include="Source\AudioManager.cpp" />
+    <ClCompile Include="Source\Button.cpp" />
     <ClCompile Include="Source\GameplayElements\Ball.cpp" />
     <ClCompile Include="Source\GameplayElements\Paddle.cpp" />
     <ClCompile Include="Source\GameplayLoop.cpp" />
     <ClCompile Include="Source\GameStates\GameplayState.cpp" />
+    <ClCompile Include="Source\GameStates\MainMenuState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\AssetPaths.h" />
     <ClInclude Include="Include\AudioManager.h" />
+    <ClInclude Include="Include\Button.h" />
     <ClInclude Include="Include\GameplayElements\Ball.h" />
     <ClInclude Include="Include\GameplayElements\Paddle.h" />
     <ClInclude Include="Include\GameplayLoop.h" />
     <ClInclude Include="Include\GameStates\GameplayState.h" />
     <ClInclude Include="Include\GameState.h" />
+    <ClInclude Include="Include\GameStates\MainMenuState.h" />
     <ClInclude Include="Include\SoundEffects.h" />
   </ItemGroup>
   <ItemGroup>

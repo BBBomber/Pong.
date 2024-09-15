@@ -1,5 +1,7 @@
 #include "../Include/GameplayLoop.h"
 #include "../Include/AudioManager.h"
+#include "../Include/GameStates/MainMenuState.h"
+#include<iostream>
 
 // Constructor: Initializes the window and sets up the game
 GameplayLoop::GameplayLoop()
@@ -9,6 +11,7 @@ GameplayLoop::GameplayLoop()
     currentState(nullptr)  // No state initially set
 {
     window.setView(view);              // Set the view
+    window.setFramerateLimit(60);
 }
 
 // Destructor: Cleanup
@@ -20,6 +23,8 @@ GameplayLoop::~GameplayLoop()
 
 void GameplayLoop::initialize()
 {
+    setState(new MainMenuState(this));
+
     // Initialize the AudioManager at the start of the game
     AudioManager::getInstance().initialize();
 }
@@ -42,30 +47,50 @@ void GameplayLoop::run()
         processEvents(deltaTime);
         update(deltaTime);
         render();
+
+        performStateChange();
     }
 }
 
-// Set the current game state
+// Queue the state change (deferred)
+void GameplayLoop::queueStateChange(GameState* nextState)
+{
+    this->nextState = nextState;  // Store the next state, but don't switch yet
+}
+
 void GameplayLoop::setState(GameState* state)
 {
-    if (currentState)
-    {
-        delete currentState;  // Clean up the previous state
-    }
     currentState = state;
-    currentState->initialize();  // Initialize the new state
+    nextState = nullptr;
+}
+
+// Perform the actual state change
+void GameplayLoop::performStateChange()
+{
+    if (nextState)  // If a state change has been queued
+    {
+        if (currentState)
+        {
+            delete currentState;  // Clean up the current state
+        }
+        currentState = nextState;  // Switch to the new state
+        currentState->initialize();  // Initialize the new state
+        nextState = nullptr;  // Reset the next state pointer
+    }
 }
 
 // Handles input and events
 void GameplayLoop::processEvents(float deltaTime)
 {
 
+    sf::Event event;
+
+    // Delegate input to the current state after checking for events
     if (currentState)
     {
-        currentState->handleInput(window, deltaTime);  // Delegate input to the current state
+        currentState->handleInput(window, deltaTime);  // Handle state-specific input
     }
 
-    sf::Event event;
     while (window.pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
@@ -75,6 +100,8 @@ void GameplayLoop::processEvents(float deltaTime)
         {
             maintainAspectRatio(); // Adjust the view when the window is resized
         }
+
+        currentState->handleEventInput(event, window);
     }
 }
 
@@ -118,4 +145,9 @@ void GameplayLoop::maintainAspectRatio()
     }
 
     window.setView(view); // Apply the updated view to the window
+}
+
+sf::RenderWindow& GameplayLoop::getWindow()
+{
+    return window;  // Provide access to the window for game states
 }

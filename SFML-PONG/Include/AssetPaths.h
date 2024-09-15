@@ -6,6 +6,7 @@ class AssetPaths {
 public:
 
     // Image paths
+    static const std::string bgImage;
 
     // Sound paths
     static const std::string bgMusic;
