@@ -1,7 +1,8 @@
 // HostLobbyState.cpp
 #include "../../Include/GameStates/HostLobbyState.h"
-#include "../../Include/GameStates/GameplayState.h"
+#include "../../Include/GameStates/MultiplayerGameplayState.h"
 #include "../../Include/GameStates/MainMenuState.h"
+#include "../../Include/NetworkManager.h"
 #include "../../Include/AssetPaths.h"
 #include <iostream>
 
@@ -15,11 +16,15 @@ HostLobbyState::HostLobbyState(GameplayLoop* loop)
 
 HostLobbyState::~HostLobbyState()
 {
-    networkManager.stopServer();
+    
+    networkManager->stopServer();
 }
 
 void HostLobbyState::initialize()
 {
+    networkManager = gameLoop->getNetworkManager();
+    networkManager->setIsHost(true);
+
     if (!font.loadFromFile(AssetPaths::mainFont))
     {
         std::cerr << "Failed to load font!" << std::endl;
@@ -37,7 +42,7 @@ void HostLobbyState::initialize()
     backButton.setOnClick([this]() { onBackButtonClick(); });
 
     // Start the server and listen for incoming connections
-    if (networkManager.startServer(54000))  // Listening on port 54000
+    if (networkManager->startServer(54000))  // Listening on port 54000
     {
         std::cout << "Server started. Waiting for client to connect..." << std::endl;
     }
@@ -61,8 +66,9 @@ void HostLobbyState::handleEventInput(const sf::Event& event, sf::RenderWindow& 
 
 void HostLobbyState::update(sf::RenderWindow& window, float deltaTime)
 {
+    
     // Check if a client has connected
-    if (networkManager.isClientConnected())
+    if (networkManager->isClientConnected())
     {
         std::cout << "Client connected! Ready to start the game." << std::endl;
         lobbyCodeText.setString("Client connected. Ready to start!");
@@ -79,11 +85,20 @@ void HostLobbyState::render(sf::RenderWindow& window)
 
 void HostLobbyState::onStartGameButtonClick()
 {
+    
     // Check if a client is connected before starting the game
-    if (networkManager.isClientConnected())
+    if (networkManager->isClientConnected())
     {
         std::cout << "Starting the game!" << std::endl;
-        gameLoop->queueStateChange(new GameplayState(gameLoop));  // Transition to GameplayState
+
+        // Notify the client that the game is starting
+        networkManager->sendDataToClient("START");
+
+        // Set the game state to awake
+        networkManager->setIsGameAwake(true);
+
+        // Transition to the gameplay state for the host
+        gameLoop->queueStateChange(new MultiplayerGameplayState(gameLoop));
     }
     else
     {
@@ -94,5 +109,6 @@ void HostLobbyState::onStartGameButtonClick()
 void HostLobbyState::onBackButtonClick()
 {
     // Go back to the main menu
+    networkManager->setIsHost(false);
     gameLoop->queueStateChange(new MainMenuState(gameLoop));
 }

@@ -3,11 +3,11 @@
 
 #include "../GameState.h"
 #include "../GameplayLoop.h"
-#include "../NetworkManager.h"
 #include "../Button.h"
 #include <SFML/Graphics.hpp>
 #include <string>
 
+class NetworkManager;
 
 class JoinLobbyState : public GameState
 {
@@ -30,7 +30,7 @@ private:
     Button joinButton;       // Button to join the game
     Button backButton;       // Button to go back to the main menu
 
-    NetworkManager networkManager;
+    NetworkManager* networkManager;
 
     GameplayLoop* gameLoop;         // Reference to the gameplay loop
 

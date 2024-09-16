@@ -60,3 +60,13 @@ sf::FloatRect Paddle::getBounds() const
 {
     return paddleShape.getGlobalBounds();
 }
+
+sf::Vector2f Paddle::getPosition()
+{
+    return paddleShape.getPosition();
+}
+
+void Paddle::setPosition(sf::Vector2f pos)
+{
+    paddleShape.setPosition(pos);
+}

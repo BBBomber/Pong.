@@ -172,3 +172,8 @@ void GameplayLoop::togglePause()
 {
     paused = !paused;  // Toggle the pause flag
 }
+
+NetworkManager* GameplayLoop::getNetworkManager()
+{
+    return &networkManager;  // Return a pointer to the single instance of NetworkManager
+}

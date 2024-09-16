@@ -3,9 +3,11 @@
 
 #include "../GameState.h"
 #include "../GameplayLoop.h"
-#include "../NetworkManager.h"
 #include "../Button.h"
 #include <SFML/Graphics.hpp>
+
+ 
+class NetworkManager;
 
 class HostLobbyState : public GameState
 {
@@ -27,7 +29,7 @@ private:
     Button startGameButton;  // Button to start the game once the client connects
     Button backButton;       // Button to go back to the main menu
 
-    NetworkManager networkManager;  // Manages the network connection
+    NetworkManager* networkManager;
     GameplayLoop* gameLoop;         // Reference to the gameplay loop
 
     void onStartGameButtonClick();

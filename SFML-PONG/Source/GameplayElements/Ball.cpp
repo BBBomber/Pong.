@@ -121,3 +121,23 @@ sf::FloatRect Ball::getBounds() const
     return ballShape.getGlobalBounds();
 }
 
+void Ball::setPosition(sf::Vector2f pos)
+{
+    ballShape.setPosition(pos);
+}
+
+void Ball::setVelocity(sf::Vector2f vel)
+{
+    velocity == vel;
+}
+
+sf::Vector2f Ball::getPosition()
+{
+    return ballShape.getPosition();
+}
+
+sf::Vector2f Ball::getVelocity()
+{
+    return velocity;
+}
+

@@ -16,6 +16,13 @@ public:
     void reset();                                    // Reset position
     sf::FloatRect getBounds() const;                 // Get the ball's bounds
 
+    void setPosition(sf::Vector2f pos);
+    void setVelocity(sf::Vector2f vel);
+
+    sf::Vector2f getPosition();
+    sf::Vector2f getVelocity();
+
+
 private:
     sf::CircleShape ballShape;                       // Shape representing the ball
     sf::Vector2f velocity;                           // Ball velocity (speed and direction)

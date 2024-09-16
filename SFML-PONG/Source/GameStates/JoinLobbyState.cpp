@@ -1,6 +1,6 @@
 // JoinLobbyState.cpp
 #include "../../Include/GameStates/JoinLobbyState.h"
-#include "../../Include/GameStates/GameplayState.h"
+#include "../../Include/GameStates/MultiplayerGameplayState.h"
 #include "../../Include/GameStates/MainMenuState.h"
 #include "../../Include/NetworkManager.h"
 #include "../../Include/AssetPaths.h"
@@ -16,6 +16,7 @@ JoinLobbyState::JoinLobbyState(GameplayLoop* loop)
 
 void JoinLobbyState::initialize()
 {
+    networkManager = gameLoop->getNetworkManager();
     if (!font.loadFromFile(AssetPaths::mainFont))
     {
         std::cerr << "Failed to load font!" << std::endl;
@@ -71,7 +72,15 @@ void JoinLobbyState::handleEventInput(const sf::Event& event, sf::RenderWindow& 
 
 void JoinLobbyState::update(sf::RenderWindow& window, float deltaTime)
 {
-    // Any additional logic can be added here
+    // Continuously check for a message from the server (host)
+    std::string serverMessage = networkManager->receiveDataFromServer();
+
+    // If the server sends the "START" message, transition to the gameplay state
+    if (serverMessage == "START")
+    {
+        std::cout << "Host started the game! Transitioning to GameplayState." << std::endl;
+        gameLoop->queueStateChange(new MultiplayerGameplayState(gameLoop));
+    }
 }
 
 void JoinLobbyState::render(sf::RenderWindow& window)
@@ -89,10 +98,10 @@ void JoinLobbyState::onJoinButtonClick()
     std::cout << "Joining game with lobby code: " << lobbyCode << std::endl;
 
     // Attempt to connect to the host server (for now, we're using localhost for testing)
-    if (networkManager.connectToServer(lobbyCode, 54000))  // Assuming the server runs on port 54000
+    if (networkManager->connectToServer(lobbyCode, 54000))  // Assuming the server runs on port 54000
     {
-        std::cout << "Connected to server! Transitioning to GameplayState." << std::endl;
-        gameLoop->queueStateChange(new GameplayState(gameLoop));
+        std::cout << "Connected to server! Waiting for the host to start the game." << std::endl;
+      
     }
     else
     {

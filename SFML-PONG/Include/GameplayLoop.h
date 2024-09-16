@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Include/GameState.h"
+#include "../Include/NetworkManager.h"
 #include <SFML/Graphics.hpp>
 
 class GameplayLoop
@@ -20,6 +21,8 @@ public:
     void togglePause();           // Function to toggle pause
     bool isPaused() const { return paused; }
 
+    NetworkManager* getNetworkManager();
+
 private:
 
     sf::RenderWindow window;     // The SFML window where the game will run
@@ -29,6 +32,8 @@ private:
 
     GameState* currentState;           // Pointer to the current game state
     GameState* nextState;
+
+    NetworkManager networkManager;
 
     bool paused;                 // Global pause flag
 

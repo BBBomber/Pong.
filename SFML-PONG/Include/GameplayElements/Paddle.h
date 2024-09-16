@@ -12,6 +12,9 @@ public:
     void render(sf::RenderWindow& window); // Draw the paddle on the window
 
     sf::FloatRect getBounds() const;      // Get the paddle's bounds for collision detection
+    sf::Vector2f getPosition();
+    void setPosition(sf::Vector2f pos);
+
 
 private:
     sf::RectangleShape paddleShape;       // The shape representing the paddle
