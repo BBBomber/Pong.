@@ -43,6 +43,10 @@ void GameplayLoop::run()
     {
         // Calculate deltaTime once per frame
         float deltaTime = clock.restart().asSeconds();
+        if (paused)
+        {
+            deltaTime = 0;  // Set delta time to 0 when the game is paused
+        }
 
         processEvents(deltaTime);
         update(deltaTime);
@@ -101,7 +105,18 @@ void GameplayLoop::processEvents(float deltaTime)
             maintainAspectRatio(); // Adjust the view when the window is resized
         }
 
-        currentState->handleEventInput(event, window);
+        if (event.type == sf::Event::KeyPressed)
+        {
+            if (event.key.code == sf::Keyboard::P)  // Press 'P' to toggle pause
+            {
+                togglePause();  // Toggle pause
+            }
+        }
+
+        if (!paused && currentState)
+        {
+            currentState->handleEventInput(event, window);
+        }
     }
 }
 
@@ -150,4 +165,10 @@ void GameplayLoop::maintainAspectRatio()
 sf::RenderWindow& GameplayLoop::getWindow()
 {
     return window;  // Provide access to the window for game states
+}
+
+
+void GameplayLoop::togglePause()
+{
+    paused = !paused;  // Toggle the pause flag
 }

@@ -17,6 +17,9 @@ public:
 
     sf::RenderWindow& getWindow();    // Accessor for the window
 
+    void togglePause();           // Function to toggle pause
+    bool isPaused() const { return paused; }
+
 private:
 
     sf::RenderWindow window;     // The SFML window where the game will run
@@ -26,6 +29,8 @@ private:
 
     GameState* currentState;           // Pointer to the current game state
     GameState* nextState;
+
+    bool paused;                 // Global pause flag
 
     void processEvents(float deltaTime);        // Handles input and events
     void update(float deltaTime);               // Updates the game state
