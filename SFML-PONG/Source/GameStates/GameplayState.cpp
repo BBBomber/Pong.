@@ -1,5 +1,6 @@
 #include "../../Include/GameStates/GameplayState.h"
 #include "../../Include/AudioManager.h"
+#include "../../Include/GameStates/GameOverState.h"
 #include "../../Include/AssetPaths.h"
 
 GameplayState::GameplayState(GameplayLoop* loop)
@@ -93,15 +94,33 @@ void GameplayState::checkGoal()
         rightScore++;  // Right player scores
         AudioManager::getInstance().playSoundEffect(SoundEffects::Score);
         updateScoreText();
-        reset();       // Reset the ball 
+
+        if (rightScore == 5)
+        {
+            // Right player wins, transition to GameOverState
+            gameLoop->queueStateChange(new GameOverState(gameLoop, "Right"));
+        }
+        else
+        {
+            reset();  // Reset the ball if the game is not over
+        }
     }
     // Check if the ball went past the right side (left player scores)
-    else if (ballPos.x > 800)  // Assuming the window width is 800
+    else if (ballPos.x > 800)
     {
         leftScore++;   // Left player scores
         AudioManager::getInstance().playSoundEffect(SoundEffects::Score);
         updateScoreText();
-        reset();       // Reset the ball 
+
+        if (leftScore == 5)
+        {
+            // Left player wins, transition to GameOverState
+            gameLoop->queueStateChange(new GameOverState(gameLoop, "Left"));
+        }
+        else
+        {
+            reset();  // Reset the ball if the game is not over
+        }
     }
 }
 
