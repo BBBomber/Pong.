@@ -1,5 +1,6 @@
 #include "../../Include/GameStates/MainMenuState.h"
 #include "../../Include/GameStates/GameplayState.h"
+#include "../../Include/GameStates/HostLobbyState.h"
 #include "../../Include/AssetPaths.h"
 #include <iostream>
 
@@ -28,6 +29,7 @@ void MainMenuState::handleEventInput(const sf::Event& event, sf::RenderWindow& w
     // Handle button events
     playButton.handleEvent(event, window);
     quitButton.handleEvent(event, window);
+    HostGame.handleEvent(event, window);
     
 }
 
@@ -44,6 +46,7 @@ void MainMenuState::render(sf::RenderWindow& window)
     window.draw(titleText);
     playButton.render(window);
     quitButton.render(window);
+    HostGame.render(window);
 
 }
 
@@ -59,14 +62,22 @@ void MainMenuState::onQuitButtonClick()
     gameLoop->getWindow().close();  // Close the game
 }
 
+void MainMenuState::onHostButtonClick()
+{
+    gameLoop->queueStateChange(new HostLobbyState(gameLoop));
+    std::cout << "clicked" << std::endl;
+}
+
 void MainMenuState::initButtons()
 {
     // Local variables for button parameters
     sf::Vector2f playButtonPosition(300.0f, 300.0f);
     sf::Vector2f quitButtonPosition(300.0f, 400.0f);
+    sf::Vector2f hostButtonPosition(300.0f, 500.0f);
     sf::Vector2f buttonSize(200.0f, 50.0f);
     sf::Color playButtonColor(sf::Color::Green);   
-    sf::Color quitButtonColor(sf::Color::Red);   
+    sf::Color quitButtonColor(sf::Color::Red);
+    sf::Color hostButtonColor(sf::Color::Blue);
     sf::Color textColor(sf::Color::White);    
     sf::Color borderColor(sf::Color::Yellow);        
     float borderThickness = 3.0f;
@@ -76,8 +87,11 @@ void MainMenuState::initButtons()
     playButton.setOnClick(std::bind(&MainMenuState::onPlayButtonClick, this));
 
     // Initialize quit button
-    quitButton.init("Quit", quitButtonPosition, buttonSize, quitButtonColor, textColor, borderColor, borderThickness);
+    quitButton.init("Quit Game", quitButtonPosition, buttonSize, quitButtonColor, textColor, borderColor, borderThickness);
     quitButton.setOnClick(std::bind(&MainMenuState::onQuitButtonClick, this));
+
+    HostGame.init("Host Game", hostButtonPosition, buttonSize, hostButtonColor, textColor, borderColor, borderThickness);
+    HostGame.setOnClick(std::bind(&MainMenuState::onHostButtonClick, this));
 
 }
 

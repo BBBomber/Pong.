@@ -25,11 +25,13 @@ private:
 
     Button playButton;
     Button quitButton;
+    Button HostGame;
 
     GameplayLoop* gameLoop;  // Store the reference to the gameplay loop
 
     void onPlayButtonClick();
     void onQuitButtonClick();
+    void onHostButtonClick();
 
     void initButtons();
     void initBackground();
