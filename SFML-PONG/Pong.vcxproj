@@ -142,7 +142,9 @@
     <ClCompile Include="Source\GameStates\GameOverState.cpp" />
     <ClCompile Include="Source\GameStates\GameplayState.cpp" />
     <ClCompile Include="Source\GameStates\HostLobbyState.cpp" />
+    <ClCompile Include="Source\GameStates\JoinLobbyState.cpp" />
     <ClCompile Include="Source\GameStates\MainMenuState.cpp" />
+    <ClCompile Include="Source\NetworkManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\AssetPaths.h" />
@@ -155,7 +157,9 @@
     <ClInclude Include="Include\GameStates\GameplayState.h" />
     <ClInclude Include="Include\GameState.h" />
     <ClInclude Include="Include\GameStates\HostLobbyState.h" />
+    <ClInclude Include="Include\GameStates\JoinLobbyState.h" />
     <ClInclude Include="Include\GameStates\MainMenuState.h" />
+    <ClInclude Include="Include\NetworkManager.h" />
     <ClInclude Include="Include\SoundEffects.h" />
   </ItemGroup>
   <ItemGroup>

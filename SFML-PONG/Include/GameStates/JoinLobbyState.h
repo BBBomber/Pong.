@@ -1,4 +1,4 @@
-// HostLobbyState.h
+// JoinLobbyState.h
 #pragma once
 
 #include "../GameState.h"
@@ -6,12 +6,14 @@
 #include "../NetworkManager.h"
 #include "../Button.h"
 #include <SFML/Graphics.hpp>
+#include <string>
 
-class HostLobbyState : public GameState
+
+class JoinLobbyState : public GameState
 {
 public:
-    HostLobbyState(GameplayLoop* loop);
-    ~HostLobbyState() override;
+    JoinLobbyState(GameplayLoop* loop);
+    ~JoinLobbyState() = default;
 
     void initialize() override;
     void handleInput(sf::RenderWindow& window, float deltaTime) override;
@@ -21,15 +23,17 @@ public:
 
 private:
     sf::Font font;
-    sf::Text lobbyCodeText;  // Text to display the generated lobby code (IP address)
-    std::string lobbyCode;   // Stores the generated lobby code
+    sf::Text lobbyCodeText;  // Text for displaying the entered lobby code
+    sf::Text promptText;     // Prompt for entering lobby code
+    std::string lobbyCode;   // Stores the lobby code (IP address for local testing)
 
-    Button startGameButton;  // Button to start the game once the client connects
+    Button joinButton;       // Button to join the game
     Button backButton;       // Button to go back to the main menu
 
-    NetworkManager networkManager;  // Manages the network connection
+    NetworkManager networkManager;
+
     GameplayLoop* gameLoop;         // Reference to the gameplay loop
 
-    void onStartGameButtonClick();
+    void onJoinButtonClick();
     void onBackButtonClick();
 };

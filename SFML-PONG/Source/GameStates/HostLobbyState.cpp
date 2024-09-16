@@ -1,15 +1,21 @@
 // HostLobbyState.cpp
-
 #include "../../Include/GameStates/HostLobbyState.h"
 #include "../../Include/GameStates/GameplayState.h"
+#include "../../Include/GameStates/MainMenuState.h"
 #include "../../Include/AssetPaths.h"
 #include <iostream>
 
 HostLobbyState::HostLobbyState(GameplayLoop* loop)
-    : gameLoop(loop), clientJoined(false)
+    : gameLoop(loop),
+    startGameButton("Start Game", { 300.0f, 300.0f }, { 200.0f, 50.0f }),
+    backButton("Back", { 300.0f, 400.0f }, { 200.0f, 50.0f }),
+    lobbyCode("127.0.0.1")  // Default to localhost for testing
 {
-    // Generate a lobby code
-    generateLobbyCode();
+}
+
+HostLobbyState::~HostLobbyState()
+{
+    networkManager.stopServer();
 }
 
 void HostLobbyState::initialize()
@@ -19,87 +25,74 @@ void HostLobbyState::initialize()
         std::cerr << "Failed to load font!" << std::endl;
     }
 
-    // Setup lobby code display
+    // Text for displaying the lobby code (IP address)
     lobbyCodeText.setFont(font);
     lobbyCodeText.setString("Lobby Code: " + lobbyCode);
-    lobbyCodeText.setCharacterSize(30);
+    lobbyCodeText.setCharacterSize(24);
     lobbyCodeText.setFillColor(sf::Color::White);
-    lobbyCodeText.setPosition(250.0f, 200.0f);
+    lobbyCodeText.setPosition(250.0f, 150.0f);
 
-    // Setup waiting for client text
-    waitingText.setFont(font);
-    waitingText.setString("Waiting for client to join...");
-    waitingText.setCharacterSize(25);
-    waitingText.setFillColor(sf::Color::White);
-    waitingText.setPosition(250.0f, 300.0f);
+    // Initialize the buttons
+    startGameButton.setOnClick([this]() { onStartGameButtonClick(); });
+    backButton.setOnClick([this]() { onBackButtonClick(); });
 
-    // Setup start game text (hidden for now)
-    startGameText.setFont(font);
-    startGameText.setString("Press Enter to Start Game");
-    startGameText.setCharacterSize(25);
-    startGameText.setFillColor(sf::Color::Green);
-    startGameText.setPosition(250.0f, 400.0f);
+    // Start the server and listen for incoming connections
+    if (networkManager.startServer(54000))  // Listening on port 54000
+    {
+        std::cout << "Server started. Waiting for client to connect..." << std::endl;
+    }
+    else
+    {
+        std::cerr << "Failed to start the server." << std::endl;
+    }
 }
 
 void HostLobbyState::handleInput(sf::RenderWindow& window, float deltaTime)
 {
-    // Simulate client joining after 3 seconds for now
-    simulateClientJoin();
-
-    if (clientJoined)
-    {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-        {
-            onStartGame(); // Start the game when Enter is pressed
-        }
-    }
+    // No real-time input to handle in the lobby state
 }
 
 void HostLobbyState::handleEventInput(const sf::Event& event, sf::RenderWindow& window)
 {
-    // Handle any specific event input for this state
+    // Handle button events
+    startGameButton.handleEvent(event, window);
+    backButton.handleEvent(event, window);
 }
 
 void HostLobbyState::update(sf::RenderWindow& window, float deltaTime)
 {
-    // Nothing to update right now
+    // Check if a client has connected
+    if (networkManager.isClientConnected())
+    {
+        std::cout << "Client connected! Ready to start the game." << std::endl;
+        lobbyCodeText.setString("Client connected. Ready to start!");
+    }
 }
 
 void HostLobbyState::render(sf::RenderWindow& window)
 {
-    window.clear(sf::Color::Black);
+    window.clear();
     window.draw(lobbyCodeText);
+    startGameButton.render(window);
+    backButton.render(window);
+}
 
-    if (!clientJoined)
+void HostLobbyState::onStartGameButtonClick()
+{
+    // Check if a client is connected before starting the game
+    if (networkManager.isClientConnected())
     {
-        window.draw(waitingText);
+        std::cout << "Starting the game!" << std::endl;
+        gameLoop->queueStateChange(new GameplayState(gameLoop));  // Transition to GameplayState
     }
     else
     {
-        window.draw(startGameText); // Show start game text if client joined
+        std::cerr << "No client connected. Can't start the game." << std::endl;
     }
 }
 
-void HostLobbyState::generateLobbyCode()
+void HostLobbyState::onBackButtonClick()
 {
-    // Simple random number as lobby code for now
-    lobbyCode = std::to_string(rand() % 9000 + 1000); // Random 4-digit number
-}
-
-void HostLobbyState::simulateClientJoin()
-{
-    // For now, simulate the client joining after a delay (3 seconds)
-    static float timeElapsed = 0.0f;
-    timeElapsed += 1.0f;
-
-    if (timeElapsed >= 3.0f)
-    {
-        clientJoined = true;
-    }
-}
-
-void HostLobbyState::onStartGame()
-{
-    // Queue the transition to GameplayState
-    gameLoop->queueStateChange(new GameplayState(gameLoop));
+    // Go back to the main menu
+    gameLoop->queueStateChange(new MainMenuState(gameLoop));
 }

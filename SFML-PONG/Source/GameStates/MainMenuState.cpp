@@ -1,6 +1,7 @@
 #include "../../Include/GameStates/MainMenuState.h"
 #include "../../Include/GameStates/GameplayState.h"
 #include "../../Include/GameStates/HostLobbyState.h"
+#include "../../Include/GameStates/JoinLobbyState.h"
 #include "../../Include/AssetPaths.h"
 #include <iostream>
 
@@ -30,6 +31,7 @@ void MainMenuState::handleEventInput(const sf::Event& event, sf::RenderWindow& w
     playButton.handleEvent(event, window);
     quitButton.handleEvent(event, window);
     HostGame.handleEvent(event, window);
+    JoinGameBtn.handleEvent(event, window);
     
 }
 
@@ -47,6 +49,7 @@ void MainMenuState::render(sf::RenderWindow& window)
     playButton.render(window);
     quitButton.render(window);
     HostGame.render(window);
+    JoinGameBtn.render(window);
 
 }
 
@@ -65,15 +68,22 @@ void MainMenuState::onQuitButtonClick()
 void MainMenuState::onHostButtonClick()
 {
     gameLoop->queueStateChange(new HostLobbyState(gameLoop));
-    std::cout << "clicked" << std::endl;
+
+}
+
+void MainMenuState::onJoinButtonClick()
+{
+    gameLoop->queueStateChange(new JoinLobbyState(gameLoop));
+
 }
 
 void MainMenuState::initButtons()
 {
     // Local variables for button parameters
-    sf::Vector2f playButtonPosition(300.0f, 300.0f);
-    sf::Vector2f quitButtonPosition(300.0f, 400.0f);
-    sf::Vector2f hostButtonPosition(300.0f, 500.0f);
+    sf::Vector2f playButtonPosition(300.0f, 200.0f);
+    sf::Vector2f quitButtonPosition(300.0f, 300.0f);
+    sf::Vector2f hostButtonPosition(300.0f, 400.0f);
+    sf::Vector2f JoinButtonPosition(300.0f, 500.0f);
     sf::Vector2f buttonSize(200.0f, 50.0f);
     sf::Color playButtonColor(sf::Color::Green);   
     sf::Color quitButtonColor(sf::Color::Red);
@@ -92,6 +102,9 @@ void MainMenuState::initButtons()
 
     HostGame.init("Host Game", hostButtonPosition, buttonSize, hostButtonColor, textColor, borderColor, borderThickness);
     HostGame.setOnClick(std::bind(&MainMenuState::onHostButtonClick, this));
+
+    JoinGameBtn.init("Join Game", JoinButtonPosition, buttonSize, hostButtonColor, textColor, borderColor, borderThickness);
+    JoinGameBtn.setOnClick(std::bind(&MainMenuState::onJoinButtonClick, this));
 
 }
 
