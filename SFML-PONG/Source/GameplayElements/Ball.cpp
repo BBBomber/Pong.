@@ -1,6 +1,6 @@
 #include "../../Include/GameplayElements/Ball.h"
 #include "../../Include/AudioManager.h"
-
+#include <cmath>
 
 
 // Constructor to initialize ball's radius and speed
@@ -17,7 +17,7 @@ void Ball::initialize()
 {
     // Start the ball in the center of the screen
     ballShape.setPosition(400, 300);  // Assuming a default 800x600 view
-    velocity = sf::Vector2f(-speed, -speed);  // Initial velocity
+    velocity = sf::Vector2f(-speed/2, -speed/2);  // Initial velocity
 }
 
 // Update the ball's movement and check for window and paddle collisions
@@ -45,17 +45,30 @@ void Ball::handleCollision(const Paddle& paddle)
     // Check if the ball collides with the paddle
     if (ballBounds.intersects(paddleBounds))
     {
-        // Reverse the horizontal velocity (bounce back)
         velocity.x = -velocity.x;
+  
+        float paddleCenterY = paddleBounds.top + paddleBounds.height / 2.0f;
+        float collidePoint = (ballShape.getPosition().y - paddleCenterY) / (paddleBounds.height / 2.0f);
+
+        const float pi = 3.14159265358979323846f;
+     
+        float angleRad = ( pi / 4.0f) * collidePoint;
+
+        // Determine the direction of the ball (left or right)
+        int direction = (velocity.x > 0) ? 1 : -1;
+
+        
+        velocity.x = direction * speed * std::cos(angleRad);
+        velocity.y = speed * std::sin(angleRad);
 
         AudioManager::getInstance().playSoundEffect(SoundEffects::Bounce);
 
-        // Move the ball out of the paddle to prevent it from sticking
-        if (velocity.x > 0)  // Moving right
+        
+        if (velocity.x > 0)  
         {
             ballShape.setPosition(paddleBounds.left + paddleBounds.width + radius, ballShape.getPosition().y);
         }
-        else  // Moving left
+        else 
         {
             ballShape.setPosition(paddleBounds.left - radius, ballShape.getPosition().y);
         }

@@ -7,7 +7,7 @@ GameplayState::GameplayState(GameplayLoop* loop)
     : gameLoop(loop),  // Store the reference to GameplayLoop
     leftPaddle(sf::Vector2f(0, 250), sf::Keyboard::W, sf::Keyboard::S),   // Initialize left paddle (W and S)
     rightPaddle(sf::Vector2f(790, 250), sf::Keyboard::Up, sf::Keyboard::Down),  // Initialize right paddle (Up and Down)
-    ball(10.f, 400.f), leftScore(0), rightScore(0)  // Initialize ball and score
+    ball(10.f, 700.f), leftScore(0), rightScore(0)  // Initialize ball and score
 {
 }
 

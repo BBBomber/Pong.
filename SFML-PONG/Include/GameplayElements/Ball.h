@@ -6,7 +6,7 @@
 class Ball
 {
 public:
-    Ball(float radius = 10.f, float speed = 300.f);  // Constructor to initialize ball with optional radius and speed
+    Ball(float radius = 10.f, float speed = 700.f);  // Constructor to initialize ball with optional radius and speed
 
     void initialize();                               // Initialize the ball's position and velocity
     void update(float deltaTime, const sf::RenderWindow& window);   // Update ball movement with collision checks

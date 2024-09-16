@@ -15,8 +15,8 @@ public:
 
 private:
     sf::RectangleShape paddleShape;       // The shape representing the paddle
-    float speed = 400;                          // Speed of the paddle
+    float speed = 500;                          // Speed of the paddle
     sf::Keyboard::Key upKey;              // Key to move paddle up
     sf::Keyboard::Key downKey;            // Key to move paddle down
-    sf::Vector2f paddleSize = sf::Vector2f(10, 100);
+    sf::Vector2f paddleSize = sf::Vector2f(10, 60);
 };
