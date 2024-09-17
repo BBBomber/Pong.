@@ -92,10 +92,9 @@ void HostLobbyState::onStartGameButtonClick()
         std::cout << "Starting the game!" << std::endl;
 
         // Notify the client that the game is starting
-        networkManager->sendDataToClient("START");
+        networkManager->sendDataToClient("START;");
 
-        // Set the game state to awake
-        networkManager->setIsGameAwake(true);
+        
 
         // Transition to the gameplay state for the host
         gameLoop->queueStateChange(new MultiplayerGameplayState(gameLoop));

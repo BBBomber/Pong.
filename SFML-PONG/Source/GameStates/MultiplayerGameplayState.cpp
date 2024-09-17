@@ -269,7 +269,7 @@ void MultiplayerGameplayState::syncBallAndScore(float deltaTime, sf::RenderWindo
             std::to_string(ball.getPosition().y) + ":" +
             std::to_string(ball.getVelocity().x) + ":" +
             std::to_string(ball.getVelocity().y) + "|SCORE:" +
-            std::to_string(leftScore) + ":" + std::to_string(rightScore);
+            std::to_string(leftScore) + ":" + std::to_string(rightScore) + ";";  // Add message delimiter
 
         networkManager->sendDataToClient(combinedData);
         std::cerr << "Host sent: " << combinedData << std::endl;  // Debug logging

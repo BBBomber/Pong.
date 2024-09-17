@@ -72,15 +72,29 @@ void JoinLobbyState::handleEventInput(const sf::Event& event, sf::RenderWindow& 
 
 void JoinLobbyState::update(sf::RenderWindow& window, float deltaTime)
 {
-    // Continuously check for a message from the server (host)
-    std::string serverMessage = networkManager->receiveDataFromServer();
+    
+    
+        // Continuously check for a message from the server (host)
+        std::string serverMessage = networkManager->receiveDataFromServer();
 
-    // If the server sends the "START" message, transition to the gameplay state
-    if (serverMessage == "START")
-    {
-        std::cout << "Host started the game! Transitioning to GameplayState." << std::endl;
-        gameLoop->queueStateChange(new MultiplayerGameplayState(gameLoop));
-    }
+        // Process only if we get a message
+        if (!serverMessage.empty())
+        {
+            std::cout << "Received message: " << serverMessage << std::endl;
+
+            // If the server sends the "START" message, transition to the gameplay state
+            if (serverMessage == "START")
+            {
+                std::cout << "Host started the game! Transitioning to GameplayState." << std::endl;
+                gameLoop->queueStateChange(new MultiplayerGameplayState(gameLoop));
+            }
+            else
+            {
+                std::cerr << "Unexpected message received: " << serverMessage << std::endl;
+            }
+        }
+    
+    
 }
 
 void JoinLobbyState::render(sf::RenderWindow& window)

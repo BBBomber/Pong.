@@ -62,12 +62,16 @@ bool NetworkManager::isClientConnected()
 
 void NetworkManager::sendDataToClient(const std::string& data)
 {
-    if (clientConnected)
+    std::size_t totalSent = 0;
+    while (totalSent < data.size())
     {
-        if (client.send(data.c_str(), data.size()) != sf::Socket::Done)
+        std::size_t sent;
+        if (client.send(data.c_str() + totalSent, data.size() - totalSent, sent) != sf::Socket::Done)
         {
             std::cerr << "Error sending data to client" << std::endl;
+            break;
         }
+        totalSent += sent;
     }
 }
 
@@ -104,13 +108,28 @@ void NetworkManager::sendDataToServer(const std::string& data)
 
 std::string NetworkManager::receiveDataFromServer()
 {
-    char data[100];
+    static std::string buffer;  // Buffer to accumulate data
+    char data[100];  // Temporary buffer for each receive call
     std::size_t received;
     sf::Socket::Status status = client.receive(data, sizeof(data), received);
 
     if (status == sf::Socket::Done)
     {
-        return std::string(data, received);
+        buffer.append(data, received);  // Accumulate the data in the buffer
+
+        // Debug: Print the buffer to see what's accumulated
+        std::cout << "Buffer content: " << buffer << std::endl;
+
+        // Check if a full message has been received (use ';' as a message delimiter)
+        size_t pos = buffer.find(';');
+        if (pos != std::string::npos)
+        {
+            std::string message = buffer.substr(0, pos);  // Extract the complete message
+            buffer.erase(0, pos + 1);  // Remove the processed message from the buffer
+            return message;  // Return the full message
+        }
+        // If we don't have a full message yet, return an empty string
+        return "";
     }
     else if (status == sf::Socket::NotReady)
     {
@@ -123,6 +142,7 @@ std::string NetworkManager::receiveDataFromServer()
         clientConnected = false;
         return "";
     }
+
     std::cerr << "Error receiving data from server" << std::endl;
     return "";
 }
