@@ -46,5 +46,7 @@ private:
 
     void syncPaddles(float deltaTime);
     void syncBallAndScore(float deltaTime, sf::RenderWindow& window);
+    bool isBallNearCollision();
+    sf::Vector2f lerp(sf::Vector2f a, sf::Vector2f b, float t);
 };
 
