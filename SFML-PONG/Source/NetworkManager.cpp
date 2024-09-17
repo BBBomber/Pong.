@@ -21,6 +21,8 @@ bool NetworkManager::startServer(unsigned short port)
     }
     std::cout << "Server is listening on port " << port << std::endl;
 
+    listener.setBlocking(false);
+
     // Start the server thread, using the class member for better lifecycle management
     serverThread = std::thread([this]()
         {
@@ -30,6 +32,7 @@ bool NetworkManager::startServer(unsigned short port)
                 {
                     std::cout << "Client connected!" << std::endl;
                     clientConnected = true;  // Set flag indicating a client is connected
+                    client.setBlocking(false);
                     break;  // Exit the loop after a successful connection
                 }
             }
@@ -47,6 +50,8 @@ bool NetworkManager::connectToServer(const std::string& ipAddress, unsigned shor
     }
     std::cout << "Connected to server!" << std::endl;
     clientConnected = true;
+
+    client.setBlocking(false);
     return true;
 }
 
@@ -70,9 +75,21 @@ std::string NetworkManager::receiveDataFromClient()
 {
     char data[100];
     std::size_t received;
-    if (client.receive(data, sizeof(data), received) == sf::Socket::Done)
+    sf::Socket::Status status = client.receive(data, sizeof(data), received);
+    if (status == sf::Socket::Done)
     {
         return std::string(data, received);
+    }
+    else if (status == sf::Socket::NotReady)
+    {
+        // No data available, return an empty string
+        return "";
+    }
+    else if (status == sf::Socket::Disconnected)
+    {
+        std::cerr << "Client disconnected" << std::endl;
+        clientConnected = false;
+        return "";
     }
     return "";
 }
@@ -89,9 +106,23 @@ std::string NetworkManager::receiveDataFromServer()
 {
     char data[100];
     std::size_t received;
-    if (client.receive(data, sizeof(data), received) == sf::Socket::Done)
+    sf::Socket::Status status = client.receive(data, sizeof(data), received);
+
+    if (status == sf::Socket::Done)
     {
         return std::string(data, received);
     }
+    else if (status == sf::Socket::NotReady)
+    {
+        // No data available, return an empty string
+        return "";
+    }
+    else if (status == sf::Socket::Disconnected)
+    {
+        std::cerr << "Disconnected from server" << std::endl;
+        clientConnected = false;
+        return "";
+    }
+    std::cerr << "Error receiving data from server" << std::endl;
     return "";
 }

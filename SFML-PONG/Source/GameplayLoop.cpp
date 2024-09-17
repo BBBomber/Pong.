@@ -27,6 +27,7 @@ void GameplayLoop::initialize()
 
     // Initialize the AudioManager at the start of the game
     AudioManager::getInstance().initialize();
+    //window.setFramerateLimit(60);
 }
 
 // The main game loop
