@@ -7,7 +7,7 @@
 
 MultiplayerGameplayState::MultiplayerGameplayState(GameplayLoop* loop)
     : gameLoop(loop), leftPaddle(sf::Vector2f(0, 250), sf::Keyboard::W, sf::Keyboard::S),
-    rightPaddle(sf::Vector2f(790, 250), sf::Keyboard::Up, sf::Keyboard::Down), ball(10.f, 700.f),
+    rightPaddle(sf::Vector2f(790, 250), sf::Keyboard::Up, sf::Keyboard::Down), ball(10.f, 400.f),
     leftScore(0), rightScore(0)
 {
 }
@@ -262,86 +262,90 @@ void MultiplayerGameplayState::syncScore()
 
 void MultiplayerGameplayState::syncBallAndScore(float deltaTime, sf::RenderWindow& window)
 {
-    if (isHost)
-    {
-        // Host sends ball position, velocity, and score to the client in one message
-        std::string combinedData = "BALL:" + std::to_string(ball.getPosition().x) + ":" +
-            std::to_string(ball.getPosition().y) + ":" +
-            std::to_string(ball.getVelocity().x) + ":" +
-            std::to_string(ball.getVelocity().y) + "|SCORE:" +
-            std::to_string(leftScore) + ":" + std::to_string(rightScore) + ";";  // Add message delimiter
-
-        networkManager->sendDataToClient(combinedData);
-        std::cerr << "Host sent: " << combinedData << std::endl;  // Debug logging
-    }
-    else
-    {
-        // Client receives combined ball and score data from the host
-        std::string receivedData = networkManager->receiveDataFromServer();
-        if (!receivedData.empty())
+    
+        if (isHost)
         {
-            std::cerr << "Client received: " << receivedData << std::endl;  // Debug logging
+            // Host sends ball position, velocity, and score to the client in one message
+            std::string combinedData = "BALL:" + std::to_string(ball.getPosition().x) + ":" +
+                std::to_string(ball.getPosition().y) + ":" +
+                std::to_string(ball.getVelocity().x) + ":" +
+                std::to_string(ball.getVelocity().y) + "|SCORE:" +
+                std::to_string(leftScore) + ":" + std::to_string(rightScore) + ";";  // Add message delimiter
 
-            // Split the message by '|' to separate ball and score data
-            size_t separatorIndex = receivedData.find('|');
-            if (separatorIndex != std::string::npos)
+            networkManager->sendDataToClient(combinedData);
+            std::cerr << "Host sent: " << combinedData << std::endl;  // Debug logging
+        }
+        else
+        {
+            // Client receives combined ball and score data from the host
+            std::string receivedData = networkManager->receiveDataFromServer();
+            if (!receivedData.empty())
             {
-                std::string ballData = receivedData.substr(0, separatorIndex);
-                std::string scoreData = receivedData.substr(separatorIndex + 1);
+                std::cerr << "Client received: " << receivedData << std::endl;  // Debug logging
 
-                // Parse ball data
-                if (ballData.find("BALL:") == 0)
+                // Split the message by '|' to separate ball and score data
+                size_t separatorIndex = receivedData.find('|');
+                if (separatorIndex != std::string::npos)
                 {
-                    std::stringstream ss(ballData.substr(5));  // Skip "BALL:"
-                    float ballX, ballY, velX, velY;
-                    char delimiter;
-                    if (ss >> ballX >> delimiter >> ballY >> delimiter >> velX >> delimiter >> velY)
-                    {
-                        ball.setPosition(sf::Vector2f(ballX, ballY));
-                        ball.setVelocity(sf::Vector2f(velX, velY));
-                        std::cerr << "Ball position updated: (" << ballX << ", " << ballY << ")" << std::endl;
+                    std::string ballData = receivedData.substr(0, separatorIndex);
+                    std::string scoreData = receivedData.substr(separatorIndex + 1);
 
-                        ball.update(deltaTime, window);
-                    }
-                    else
+                    // Parse ball data
+                    if (ballData.find("BALL:") == 0)
                     {
-                        std::cerr << "Error parsing ball data: " << ballData << std::endl;
-                    }
-                }
-
-                // Parse score data
-                if (scoreData.find("SCORE:") == 0)
-                {
-                    std::stringstream ss(scoreData.substr(6));  // Skip "SCORE:"
-                    int updatedLeftScore, updatedRightScore;
-                    char delimiter;
-                    if (ss >> updatedLeftScore >> delimiter >> updatedRightScore)
-                    {
-                        // Validate the score before updating
-                        if (updatedLeftScore >= 0 && updatedRightScore >= 0)
+                        std::stringstream ss(ballData.substr(5));  // Skip "BALL:"
+                        float ballX, ballY, velX, velY;
+                        char delimiter;
+                        if (ss >> ballX >> delimiter >> ballY >> delimiter >> velX >> delimiter >> velY)
                         {
-                            leftScore = updatedLeftScore;
-                            rightScore = updatedRightScore;
-                            updateScoreText();
-                            std::cerr << "Scores updated: Left = " << leftScore << ", Right = " << rightScore << std::endl;
+                            ball.setPosition(sf::Vector2f(ballX, ballY));
+                            ball.setVelocity(sf::Vector2f(velX, velY));
+                            std::cerr << "Ball position updated: (" << ballX << ", " << ballY << ")" << std::endl;
+
+                            ball.update(deltaTime, window);
                         }
                         else
                         {
-                            std::cerr << "Invalid score received: " << scoreData << std::endl;
+                            std::cerr << "Error parsing ball data: " << ballData << std::endl;
                         }
                     }
-                    else
+
+                    // Parse score data
+                    if (scoreData.find("SCORE:") == 0)
                     {
-                        std::cerr << "Error parsing score data: " << scoreData << std::endl;
+                        std::stringstream ss(scoreData.substr(6));  // Skip "SCORE:"
+                        int updatedLeftScore, updatedRightScore;
+                        char delimiter;
+                        if (ss >> updatedLeftScore >> delimiter >> updatedRightScore)
+                        {
+                            // Validate the score before updating
+                            if (updatedLeftScore >= 0 && updatedRightScore >= 0)
+                            {
+                                leftScore = updatedLeftScore;
+                                rightScore = updatedRightScore;
+                                updateScoreText();
+                                std::cerr << "Scores updated: Left = " << leftScore << ", Right = " << rightScore << std::endl;
+                            }
+                            else
+                            {
+                                std::cerr << "Invalid score received: " << scoreData << std::endl;
+                            }
+                        }
+                        else
+                        {
+                            std::cerr << "Error parsing score data: " << scoreData << std::endl;
+                        }
                     }
                 }
-            }
-            else
-            {
-                std::cerr << "Invalid message format, missing '|' separator: " << receivedData << std::endl;
+                else
+                {
+                    std::cerr << "Invalid message format, missing '|' separator: " << receivedData << std::endl;
+                }
             }
         }
-    }
+
+        
+    
 }
 
 void MultiplayerGameplayState::reset()

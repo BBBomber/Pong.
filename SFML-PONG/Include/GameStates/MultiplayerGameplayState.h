@@ -35,8 +35,9 @@ private:
     sf::Text leftScoreText;
     sf::Text rightScoreText;
 
-    const float timeBetweenUpdates = 0.05f;  // 50 ms between updates
+    const float timeBetweenUpdates = 0.04f;  // 50 ms between updates
     float timeSinceLastUpdate = 0.0f;
+    float timeSinceLastUpdate2 = 0.0f;
 
     void checkGoal();
     void reset();
