@@ -45,8 +45,6 @@ private:
     void drawDashedLine(sf::RenderWindow& window);
 
     void syncPaddles(float deltaTime);
-    void syncBall(float deltaTime);
-    void syncScore();
     void syncBallAndScore(float deltaTime, sf::RenderWindow& window);
 };
 
