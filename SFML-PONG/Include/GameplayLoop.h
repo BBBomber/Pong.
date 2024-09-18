@@ -10,9 +10,13 @@ public:
     ~GameplayLoop();             // Destructor to clean up resources
 
     void run();                  // Function to start the game loop
+    void initialize();
 
-    // Set the current game state
-    void setState(GameState* state);
+
+    // Add a method to queue the next state
+    void queueStateChange(GameState* nextState);
+
+    sf::RenderWindow& getWindow();    // Accessor for the window
 
 private:
 
@@ -22,10 +26,15 @@ private:
     float aspectRatio;           // Aspect ratio for the game
 
     GameState* currentState;           // Pointer to the current game state
+    GameState* nextState;
 
     void processEvents(float deltaTime);        // Handles input and events
     void update(float deltaTime);               // Updates the game state
     void render();               // Draws the game to the screen
     void maintainAspectRatio();  // Function to maintain the aspect ratio
+
+    void performStateChange();  // Perform the actual state change
+
+    void setState(GameState* state);
 
 };
