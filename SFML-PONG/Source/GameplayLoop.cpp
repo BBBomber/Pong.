@@ -7,11 +7,17 @@ GameplayLoop::GameplayLoop()
     aspectRatio(4.f / 3.f)               // 4:3 aspect ratio
 {
     window.setView(view);              // Set the view
+    window.setFramerateLimit(60);
 }
 
 // Destructor: Cleanup
 GameplayLoop::~GameplayLoop()
 {
+}
+
+void GameplayLoop::initialize()
+{
+    
 }
 
 // The main game loop
@@ -78,4 +84,9 @@ void GameplayLoop::maintainAspectRatio()
     }
 
     window.setView(view); // Apply the updated view to the window
+}
+
+sf::RenderWindow& GameplayLoop::getWindow()
+{
+    return window;  // Provide access to the window for game states
 }
