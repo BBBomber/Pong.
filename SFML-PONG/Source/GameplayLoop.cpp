@@ -1,4 +1,5 @@
 #include "../Include/GameplayLoop.h"
+#include "../Include/GameStates/GameplayState.h"
 
 // Constructor: Initializes the window and sets up the game
 GameplayLoop::GameplayLoop()
@@ -19,7 +20,7 @@ GameplayLoop::~GameplayLoop()
 
 void GameplayLoop::initialize()
 {
-    //set initial state and load resources if needed
+    setState(new GameplayState(this));
 }
 
 // The main game loop
@@ -91,7 +92,7 @@ void GameplayLoop::processEvents(float deltaTime)
             maintainAspectRatio(); // Adjust the view when the window is resized
         }
 
-        //currentState->handleEventInput(event, window); // call after state has been set
+        currentState->handleEventInput(event, window); 
     }
 }
 
