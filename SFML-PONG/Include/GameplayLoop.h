@@ -9,6 +9,8 @@ public:
     ~GameplayLoop();             // Destructor to clean up resources
 
     void run();                  // Function to start the game loop
+    void initialize();
+    sf::RenderWindow& getWindow();
 
 private:
 
